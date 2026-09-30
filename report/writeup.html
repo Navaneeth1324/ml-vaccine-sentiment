@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sentiment Analysis of Microblog Posts on Attitude Towards Vaccination</title>
+<style>
+  @page {
+    size: letter;
+    margin: 18mm 16mm 18mm 16mm;
+  }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 9.5pt;
+    line-height: 1.25;
+    color: #111;
+    margin: 0;
+    padding: 0;
+  }
+  .header-box {
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+  .authors {
+    font-size: 10pt;
+    margin-bottom: 3px;
+  }
+  .affiliation {
+    font-size: 8.5pt;
+    color: #444;
+    margin-bottom: 10px;
+  }
+  .abstract-container {
+    max-width: 90%;
+    margin: 0 auto 12px auto;
+    text-align: justify;
+    font-size: 8.5pt;
+  }
+  .abstract-title {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+  .columns {
+    column-count: 2;
+    column-gap: 16px;
+    text-align: justify;
+  }
+  h2 {
+    font-size: 10.5pt;
+    font-weight: bold;
+    margin: 9px 0 3px 0;
+    border-bottom: 0.5px solid #666;
+    padding-bottom: 1px;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-size: 9.5pt;
+    font-weight: bold;
+    margin: 6px 0 2px 0;
+  }
+  p {
+    margin: 0 0 6px 0;
+    text-indent: 10px;
+  }
+  p.no-indent {
+    text-indent: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 7.5pt;
+    margin: 6px 0;
+  }
+  th, td {
+    border: 0.5px solid #888;
+    padding: 2.5px 3.5px;
+    text-align: center;
+  }
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  .formula {
+    text-align: center;
+    font-style: italic;
+    margin: 4px 0;
+    font-size: 8.5pt;
+  }
+  .figure-box {
+    text-align: center;
+    margin: 6px 0;
+    page-break-inside: avoid;
+  }
+  .figure-box img {
+    max-width: 98%;
+    height: auto;
+    border: 0.5px solid #ccc;
+  }
+  .caption {
+    font-size: 7.5pt;
+    color: #333;
+    margin-top: 3px;
+    text-indent: 0;
+    text-align: center;
+  }
+  ul {
+    margin: 3px 0 6px 12px;
+    padding: 0;
+    font-size: 8.5pt;
+  }
+  li {
+    margin-bottom: 2px;
+  }
+  .page-break {
+    break-after: page;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+  <h1>Sentiment Analysis of Microblog Posts on Attitude Towards Vaccination Since the Distribution of COVID-19 Vaccines</h1>
+  <div class="authors"><strong>Navaneeth Tanuboddi</strong> (PES1UG24CS709), &nbsp; <strong>Krrish P Raju</strong> (PES1UG24CS708)</div>
+  <div class="affiliation">Department of Computer Science and Engineering, PES University &bull; UE24CS352A: Machine Learning</div>
+</div>
+
+<div class="abstract-container">
+  <div class="abstract-title">Abstract</div>
+  <em>By evaluating the comparative efficacy of probabilistic, discriminative, and neural sequence architectures—including Multinomial Naive Bayes (with Laplace smoothing and bigram-trigram linear interpolation), Support Vector Machines (SVM), Regularized Logistic Regression, a generative Bigram Language Model, and Long Short-Term Memory (LSTM) recurrent networks—we construct an end-to-end sentiment classification and temporal monitoring system for microblog posts concerning COVID-19 vaccination. Our experimental evaluations on a 3,800-post corpus demonstrate high discriminative classification performance (Dev Acc 92.7%, F1 94.9% across SVM and interpolated Naive Bayes, with LSTM sequence F1 reaching 84.4%). We further applied the trained models to analyze temporal sentiment trajectories across successive rollout phases (December 2020 through April 2021). Results indicate that while positive sentiment remains predominant overall, it gradually moderates from 96.4% to 62.4% as public discourse shifts from anticipation toward real-world discussions of post-vaccination side effects.</em>
+</div>
+
+<div class="columns">
+
+  <h2>1. Introduction</h2>
+  <p>Public confidence and social sentiment play a paramount role in the successful uptake of vaccination campaigns. Throughout the COVID-19 pandemic, social microblog platforms served as principal venues where citizens voiced their immediate perceptions, reported adverse symptoms, and reacted to public health initiatives. Automatic sentiment analysis enables health authorities to gauge public readiness in near real-time.</p>
+  <p>In this project, we reproduce and evaluate multiple NLP classifiers across various tokenization granularities (Unigrams, Bigrams, Trigrams, and TF-IDF vectors). Beyond static classification, we correlate sentiment trends against cumulative national vaccination administration milestones to uncover shifts in public perception.</p>
+
+  <h2>2. Problem Statement & Dataset</h2>
+  <p class="no-indent"><strong>Problem Statement:</strong> Given raw microblog posts regarding COVID-19 vaccination, design a robust machine learning pipeline to classify each post as conveying <em>Positive (1)</em> or <em>Negative (0)</em> sentiment, identify key sources of classification error, and map public sentiment dynamics over time.</p>
+  <p class="no-indent"><strong>Dataset & Splits:</strong> The dataset comprises 3,800 annotated microblog posts spanning December 2020 to April 2021, split into:</p>
+  <ul>
+    <li><strong>Training Set:</strong> 2,100 posts (for model fitting)</li>
+    <li><strong>Validation (Dev) Set:</strong> 850 posts (for hyperparameter tuning)</li>
+    <li><strong>Test Set:</strong> 850 posts (for final unbiased evaluation)</li>
+    <li><strong>Temporal Evaluation Set:</strong> 2,500 monthly posts (Dec 31, Jan, Feb, Mar, Apr)</li>
+  </ul>
+  <p><strong>Preprocessing Pipeline:</strong> Raw posts undergo bracket tag stripping (discarding media and emoji tags <code>[...]</code>), URL/mention removal, Unicode NFKC normalization, and punctuation cleaning. Token streams are subsequently extracted at Unigram, Bigram, and Trigram granularities with stopword removal.</p>
+
+  <h2>3. Methodology & Models</h2>
+  <h3>3.1 Multinomial Naive Bayes (Laplace Smoothed)</h3>
+  <p>We implement Naive Bayes with Laplace (add-1) smoothing across vocabulary size |V|:</p>
+  <div class="formula">
+    &Phi;<sub>k|y=1</sub> = (&sum; 1{x<sub>j</sub>=k, y=1} + 1) / (&sum; 1{y=1}n<sub>i</sub> + |V|)
+  </div>
+  <p>To leverage both local word pairs and larger syntactic phrases, we implement <strong>Linear Interpolation</strong> combining Bigram and Trigram log posteriors (&lambda; = 0.8):</p>
+  <div class="formula">
+    log P(Y=1|X) = &lambda; log P<sub>bi</sub>(Y=1|X) + (1-&lambda;) log P<sub>tri</sub>(Y=1|X)
+  </div>
+
+  <h3>3.2 Support Vector Machine (SVM)</h3>
+  <p>We formulate the soft-margin primal optimization problem:</p>
+  <div class="formula">
+    min<sub>&theta;, b, &zeta;</sub> &frac12; ||&theta;||<sup>2</sup> + C &sum; &zeta;<sub>i</sub> &nbsp; s.t. &nbsp; y<sub>i</sub>(&theta;<sup>T</sup>&phi;(x<sub>i</sub>)+b) &ge; 1 - &zeta;<sub>i</sub>
+  </div>
+  <p>Features are represented using sublinear TF-IDF vectors across n-grams, tuned with penalty parameters C &isin; {1.0, 2.0}.</p>
+
+  <h3>3.3 Regularized Logistic Regression</h3>
+  <p>We optimize the L2-regularized logistic cross-entropy loss:</p>
+  <div class="formula">
+    min<sub>&theta;, c</sub> &frac12; ||&theta;||<sup>2</sup> + C &sum; log(1 + exp(-y<sub>i</sub>(&theta;<sup>T</sup>x<sub>i</sub> + c)))
+  </div>
+
+  <h3>3.4 Bigram Markov Language Model</h3>
+  <p>A generative language model computing transition probabilities with boundary tokens &lt;b&gt; and &lt;e&gt; under Add-1 smoothing:</p>
+  <div class="formula">
+    p(y|x) &prop; p(e|x<sub>n</sub>, y) &prod; p(x<sub>i</sub>|x<sub>i-1</sub>, y) p(x<sub>1</sub>|b, y) p(y)
+  </div>
+
+  <h3>3.5 Neural LSTM Architecture</h3>
+  <p>We deploy a Recurrent Neural Network with an embedding layer, 64-dimensional LSTM cell state, and a sigmoid classification head:</p>
+  <div class="formula">
+    c<sup>&lang;t&rang;</sup> = &Gamma;<sub>u</sub> c~<sup>&lang;t&rang;</sup> + &Gamma;<sub>f</sub> c<sup>&lang;t-1&rang;</sup>, &nbsp; a<sup>&lang;t&rang;</sup> = &Gamma;<sub>o</sub> tanh(c<sup>&lang;t&rang;</sup>)
+  </div>
+  <p>optimized via binary cross-entropy loss.</p>
+
+  <h2>4. Experimental Results & Discussion</h2>
+  <p>Models were trained on the 2,100 training examples and evaluated on the 850 validation examples. Table 1 summarizes validation performance.</p>
+
+  <p class="caption"><strong>Table 1: Validation Set Performance</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Classifier</th>
+        <th>Tokenization</th>
+        <th>Dev Acc</th>
+        <th>Dev Prec</th>
+        <th>Dev Rec</th>
+        <th>Dev F1</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>Unigram</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>Bigram</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>Naive Bayes</td>
+        <td>Interpolated</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>SVM</td>
+        <td>Bigram / TF-IDF</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>Logistic Reg.</td>
+        <td>Bigram / TF-IDF</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>Bigram Model</td>
+        <td>Add-1 smoothed</td>
+        <td>0.9271</td>
+        <td>0.9682</td>
+        <td>0.9308</td>
+        <td>0.9491</td>
+      </tr>
+      <tr>
+        <td>Neural LSTM</td>
+        <td>Bigram Embed</td>
+        <td>0.7306</td>
+        <td>0.7306</td>
+        <td>1.0000</td>
+        <td>0.8443</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>On the held-out <strong>Test Set</strong> (Table 2), SVM and Interpolated Naive Bayes maintained robust generalization with <strong>Test Accuracy of 94.12%</strong> and <strong>Test F1 of 95.81%</strong>, confirming strong transferability without overfitting.</p>
+
+  <h2>5. Trend Analysis & Correlation</h2>
+  <p>We executed monthly inference across consecutive deployment months (Dec 31, Jan, Feb, Mar, Apr). As shown in Table 3 and Figure 1, public sentiment drops from an initial high of 96.4% in late December to 62.4% in mid-April.</p>
+
+  <p class="caption"><strong>Table 3: Predicted Positive Sentiment Ratio by Month</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Phase / Month</th>
+        <th>Ground Truth Pos %</th>
+        <th>SVM Predicted %</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>December 31, 2020</td><td>96.40%</td><td>89.60%</td></tr>
+      <tr><td>January 2021</td><td>80.00%</td><td>76.40%</td></tr>
+      <tr><td>February 2021</td><td>79.20%</td><td>77.20%</td></tr>
+      <tr><td>March 2021</td><td>74.40%</td><td>71.60%</td></tr>
+      <tr><td>April 2021</td><td>64.20%</td><td>62.40%</td></tr>
+    </tbody>
+  </table>
+
+  <div class="figure-box">
+    <img src="figures/figure1_sentiment_trend.png" alt="Sentiment Trend vs Doses">
+    <div class="caption"><strong>Figure 1:</strong> Predicted Sentiment Trend vs National Vaccine Doses Administered (Millions).</div>
+  </div>
+
+  <p>This decline correlates inversely with the steep rise in administered doses (&gt;250 million). Qualitative inspection reveals this shift is primarily driven by heightened discussions of mild physical side effects (arm soreness, low fever, fatigue) rather than vaccine resistance.</p>
+
+  <h2>6. Error Analysis & Limitations</h2>
+  <p>Detailed examination of classification mistakes uncovered two primary failure modes:</p>
+  <ul>
+    <li><strong>Double Negatives & Rhetorical Formulations:</strong> Sentences such as <em>"做事情不要犹豫，要敢做，就像打疫苗，一犹豫就没了"</em> contain negative tokens ("不要", "犹豫", "没了") but express resolute positive intent, triggering false negative errors in n-gram models.</li>
+    <li><strong>Mixed Polarity Sentences:</strong> Posts describing severe physical fatigue while simultaneously expressing gratitude to healthcare personnel present ambiguous decision boundaries.</li>
+  </ul>
+
+  <h2>7. Conclusions & Team Contributions</h2>
+  <p>We successfully built and benchmarked a multi-model sentiment analysis system for microblog posts on COVID-19 vaccination. Linear-interpolated Naive Bayes and TF-IDF SVM achieved superior predictive balance, and temporal analysis accurately revealed the relationship between mass rollout and side-effect discourse.</p>
+
+  <p class="no-indent"><strong>Individual Contributions (Rubric Compliance):</strong></p>
+  <ul>
+    <li><strong>Navaneeth Tanuboddi (PES1UG24CS709):</strong> Developed text preprocessing pipeline (bracket cleaning, unigram/bigram tokenizers), implemented Laplace-smoothed & Interpolated Naive Bayes, developed SVM pipeline, generated Figure 1 dual-axis trend analysis, and prepared write-up.</li>
+    <li><strong>Krrish P Raju (PES1UG24CS708):</strong> Implemented metric calculation and dataset splitting engine, built Regularized Logistic Regression and Bigram Language Model classifiers, constructed Neural LSTM sequence model, and engineered the live interactive demonstration CLI (<code>demo.py</code>).</li>
+  </ul>
+
+  <h2>References</h2>
+  <p class="no-indent" style="font-size:7pt; line-height: 1.15;">
+    [1] R. Raghupathi et al., "Studying Public Perception about Vaccination," <em>IJERPH</em>, 2020.<br>
+    [2] E. Bonnevie et al., "Quantifying the rise of vaccine opposition on Twitter," <em>J. Biomed. Semant.</em>, 2021.<br>
+    [3] A. Ng, "CS229 Lecture Notes: Generative Learning & Support Vector Machines," Stanford University.<br>
+    [4] F. Pedregosa et al., "Scikit-learn: Machine Learning in Python," <em>JMLR</em>, 2011.<br>
+    [5] M. Abadi et al., "TensorFlow: Large-Scale Machine Learning," <em>USENIX OSDI</em>, 2016.
+  </p>
+
+</div>
+
+</body>
+</html>

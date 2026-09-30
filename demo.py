@@ -1,0 +1,133 @@
+"""
+demo.py - Interactive Live Demonstration Script for Review & Examination.
+Designed for UE24CS352A Machine Learning Mini-Project.
+Authors: Navaneeth Tanuboddi (PES1UG24CS709), Krrish P Raju (PES1UG24CS708)
+"""
+
+import os
+import sys
+import pandas as pd
+from src.util import load_dataset_csv
+from src.naive_bayes import MultinomialNaiveBayes, InterpolatedNaiveBayes
+from src.svm_classifier import SVMClassifier
+from src.logistic_regression import LogisticRegressionClassifier
+from src.bigram_model import BigramLanguageModelClassifier
+from src.rnn_lstm_model import LSTMSentimentClassifier
+
+
+def load_and_train_all(data_dir: str):
+    print(">> Initializing and training models on training set (2100 posts)...")
+    train_df = load_dataset_csv(os.path.join(data_dir, "train.csv"))
+    X_train = train_df["text"].tolist()
+    y_train = train_df["label"].tolist()
+
+    models = {
+        "SVM (TF-IDF)": SVMClassifier(tokenization="bigram", C=2.0),
+        "Naive Bayes (Interpolated)": InterpolatedNaiveBayes(lmbda=0.8),
+        "Logistic Regression": LogisticRegressionClassifier(tokenization="bigram", C=1.0),
+        "Bigram Model": BigramLanguageModelClassifier(alpha=1.0),
+        "Neural LSTM": LSTMSentimentClassifier(vocab_size=3000, embed_dim=64, hidden_dim=64)
+    }
+
+    for name, model in models.items():
+        sys.stdout.write(f"   [+] Training {name} ... ")
+        sys.stdout.flush()
+        model.fit(X_train, y_train)
+        print("Ready.")
+        
+    return models
+
+
+def predict_sample(models, text: str):
+    print("\n" + "=" * 65)
+    print(f"INPUT POST: {text}")
+    print("=" * 65)
+    print(f"{'Model':<28} | {'Predicted Sentiment':<20} | {'Confidence / Prob':<15}")
+    print("-" * 65)
+
+    for name, model in models.items():
+        if hasattr(model, "predict_proba"):
+            probs = model.predict_proba(text)
+            if isinstance(probs, dict):
+                p_neg, p_pos = probs[0], probs[1]
+            elif hasattr(probs, "shape") and len(probs.shape) == 2:
+                p_neg, p_pos = probs[0][0], probs[0][1]
+            else:
+                p_neg, p_pos = 0.5, 0.5
+            pred = "POSITIVE (1)" if p_pos >= 0.5 else "NEGATIVE (0)"
+            conf = f"{max(p_neg, p_pos)*100:.2f}%"
+        else:
+            p = model.predict([text])[0]
+            pred = "POSITIVE (1)" if p == 1 else "NEGATIVE (0)"
+            conf = "N/A"
+        print(f"{name:<28} | {pred:<20} | {conf:<15}")
+    print("=" * 65 + "\n")
+
+
+def interactive_cli():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, "data", "processed")
+    
+    print("\n" + "=" * 70)
+    print("  COVID-19 VACCINE ATTITUDE SENTIMENT ANALYSIS - LIVE DEMO")
+    print("  Course: UE24CS352A - Machine Learning Mini-Project")
+    print("  Presenters: Navaneeth Tanuboddi (709) & Krrish P Raju (708)")
+    print("=" * 70)
+    
+    models = load_and_train_all(data_dir)
+    
+    samples = [
+        "打了第一针新冠疫苗，没有任何不良反应，相信祖国！(Positive)",
+        "打完疫苗后手臂酸痛了好几天，甚至抬不起来，难受。(Negative)",
+        "第二针搞定，医护人员辛苦了，中国加油！(Positive)",
+        "听说有人接种后出现过敏反应，心里还是挺害怕的。(Negative)",
+        "Just received my first COVID-19 vaccine dose! Smooth process and grateful. (Positive)",
+        "Experienced severe fever and chills after the second shot. Really exhausted. (Negative)"
+    ]
+
+    while True:
+        print("\nDemo Menu Options:")
+        print("1. Test predefined sample posts (Chinese & English)")
+        print("2. Enter custom microblog post text")
+        print("3. View monthly sentiment trend report summary")
+        print("4. Exit")
+        
+        choice = input("\nEnter choice (1-4): ").strip()
+        
+        if choice == "1":
+            print("\nSelect a preset sample:")
+            for i, s in enumerate(samples, 1):
+                print(f"[{i}] {s}")
+            idx_str = input(f"Enter sample number (1-{len(samples)}): ").strip()
+            try:
+                idx = int(idx_str) - 1
+                if 0 <= idx < len(samples):
+                    raw_text = samples[idx].split("(")[0].strip()
+                    predict_sample(models, raw_text)
+                else:
+                    print("Invalid index.")
+            except ValueError:
+                print("Invalid input.")
+        elif choice == "2":
+            user_text = input("\nEnter post text: ").strip()
+            if user_text:
+                predict_sample(models, user_text)
+            else:
+                print("Empty input.")
+        elif choice == "3":
+            timeline_csv = os.path.join(data_dir, "vaccine_doses_timeline.csv")
+            if os.path.exists(timeline_csv):
+                df = pd.read_csv(timeline_csv)
+                print("\nNational Vaccine Rollout & Sentiment Trajectory:")
+                print(df.to_string(index=False))
+            else:
+                print("Timeline data not found.")
+        elif choice == "4":
+            print("Exiting demo. Good luck with the review!")
+            break
+        else:
+            print("Invalid choice, please select 1-4.")
+
+
+if __name__ == "__main__":
+    interactive_cli()
