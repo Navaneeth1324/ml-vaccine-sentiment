@@ -10,8 +10,8 @@
 
 | Name | SRN | GitHub | Primary Responsibilities |
 | :--- | :--- | :--- | :--- |
-| **Navaneeth Tanuboddi** | `PES1UG24CS709` | [@Navaneeth1324](https://github.com/Navaneeth1324) | Text preprocessing pipeline, Unigram/Bigram/Trigram tokenization, Naive Bayes (Laplace smoothing & Linear Interpolation), SVM classifier, Temporal Trend Analysis & Dual-Axis Visualization (Figure 1), PDF Report & Slide Deck. |
-| **Krrish P Raju** | `PES1UG24CS708` | [@krrish676767](https://github.com/krrish676767) | Grounded Misinformation Flagging & Fact-Check Verification Engine (`src/fact_checker.py`), Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
+| **Navaneeth Tanuboddi** | `PES1UG24CS709` | [@Navaneeth1324](https://github.com/Navaneeth1324) | Text preprocessing pipeline, Unigram/Bigram/Trigram tokenization, Naive Bayes (Laplace smoothing & Linear Interpolation), SVM classifier, Qualitative & Linguistic Error Analysis (`src/error_analysis.py`), Temporal Trend Analysis & Dual-Axis Visualization (Figure 1), PDF Report & Slide Deck. |
+| **Krrish P Raju** | `PES1UG24CS708` | [@krrish676767](https://github.com/krrish676767) | Misinformation Lookup & Fact-Checking module (`src/fact_checker.py`), Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
 
 
 ---
@@ -27,8 +27,8 @@ During nationwide COVID-19 vaccine campaigns, public attitude on social media pl
    - **Deep Sequence Model:** Recurrent Neural Network with an embedding layer, 64-unit LSTM cell state gating, and binary cross-entropy loss.
 2. **Feature Extraction Granularities:** Unigram (character/word), Bigram, Trigram, and TF-IDF representations.
 3. **Temporal Trend Analysis:** Analyzing monthly sentiment shifts from December 31, 2020 through April 2021 against cumulative national vaccination administration numbers.
-4. **Linguistic Error Analysis:** Investigating double negatives, rhetorical expressions, and mixed affect posts.
-5. **Grounded Misinformation Flagging & Fact-Check Verification:** Automatic pairing of anti-vaccine sentiment with a lightweight semantic vector retrieval engine cross-referencing verified WHO/CDC fact-checking FAQs (`sentence-transformers/all-MiniLM-L6-v2`) to surface authoritative scientific counter-narratives.
+4. **Linguistic Error Analysis:** Investigating double negatives, rhetorical expressions, and mixed affect posts (`src/error_analysis.py`).
+5. **Misinformation Flagging & Fact-Check Lookup:** Flagging high-risk claims and cross-referencing them against verified WHO/CDC fact-checking FAQs (`src/fact_checker.py`).
 
 
 ---
@@ -53,7 +53,8 @@ ml-vaccine-sentiment/
 │   ├── logistic_regression.py            # Regularized Logistic Regression classifier
 │   ├── bigram_model.py                   # Generative Bigram Markov language model classifier
 │   ├── rnn_lstm_model.py                 # Neural sequence model / LSTM architecture
-│   ├── fact_checker.py                   # Grounded Misinformation Flagging & Fact-Check Verification Engine
+│   ├── fact_checker.py                   # Misinformation lookup & fact-check matching engine
+│   ├── error_analysis.py                 # Qualitative & linguistic failure mode analyzer
 │   ├── trend_analysis.py                 # Monthly sentiment aggregation & dual-axis plotting
 │   └── dataset_generator.py              # Synthetic corpus generator with realistic lexical overlap
 
@@ -146,10 +147,17 @@ python3 report/build_pdf_report.py
 ```
 Output generated at: `report/writeup.pdf`.
 
+### E. Run Qualitative & Linguistic Error Analysis
+To inspect misclassified posts, categorize failure modes (negation, mixed affect, rhetorical cues), and generate the failure breakdown:
+```bash
+python3 src/error_analysis.py
+```
+Output saved to: `report/error_analysis_cases.csv`.
+
 ---
 
-### E. Run Automated Unit Test Suite
-To verify the entire preprocessing pipeline, metrics engine, models, and trend analysis:
+### F. Run Automated Unit Test Suite
+To verify the entire preprocessing pipeline, metrics engine, models, error analysis, and trend analysis:
 ```bash
 make test
 # or
@@ -195,9 +203,16 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
 
 ---
 
-## 🔍 Key Insights & Error Analysis
-1. **Double Negatives:** Phrases such as *"做事情不要犹豫，要敢做，就像打疫苗，一犹豫就没了"* contain negative words (`不要`, `犹豫`, `没了`), which mislead unigram bag-of-words models into false negatives despite strong positive intent. Bigram and interpolated models handle this significantly better by capturing the compound token `不要_犹豫`.
-2. **Ambivalent Sentiment:** Posts expressing physical discomfort while thanking healthcare staff require sequence context to resolve the dominant sentiment.
+## 🔍 Key Insights & Linguistic Error Analysis (`src/error_analysis.py`)
+
+Evaluating the models across the 850 validation samples reveals 62 posts where at least one classifier failed (7.29% error pool rate). Our automated linguistic breakdown classifies these failure modes:
+
+| Linguistic Failure Mode | Count | % of Errors | Primary Cause & Observation |
+| :--- | :---: | :---: | :--- |
+| **Negation Reversal** | 32 | 51.61% | Unigrams fail on double negatives (e.g., `不要犹豫`, `没有任何不良反应`) because negative words pull the unigram prior towards class 0. Interpolated bigrams resolve this. |
+| **Subtle Lexical Ambiguity** | 20 | 32.26% | Borderline posts discussing clinic queues or mild nerves without explicit positive or negative polarity keywords. |
+| **Mixed Affect + Negation** | 7 | 11.29% | Posts containing contrastive conjunctions (e.g., `虽然有点发烧，但是很快恢复了`) where the sentiment shifts across clauses. |
+| **Rhetorical / Sarcastic Cue** | 3 | 4.84% | Rhetorical questions (e.g., `难道这疫苗真的安全吗？`) that express skepticism without standard negative words. |
 
 ---
 
@@ -206,6 +221,7 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
 - [x] **Private GitHub Repository** initialized and configured.
 - [x] **Faculty & TAs** invited as repository collaborators.
 - [x] **Comprehensive `README.md`** with setup, reproduction commands, and team breakdown.
+- [x] **Qualitative Linguistic Error Analysis** (`src/error_analysis.py`) with categorized breakdown.
 - [x] **Two-Page Write-up in PDF Format** (`report/writeup.pdf`) formatted with problem statement, dataset details, methodology, results, and conclusions.
 - [x] **Slide Deck Presentation Outline** (`presentation/SLIDE_DECK_OUTLINE.md`) with speaker script.
 - [x] **Live Demonstration Script** (`demo.py`) with multi-model interactive testing.
