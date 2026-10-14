@@ -13,6 +13,9 @@ from src.svm_classifier import SVMClassifier
 from src.logistic_regression import LogisticRegressionClassifier
 from src.bigram_model import BigramLanguageModelClassifier
 from src.rnn_lstm_model import LSTMSentimentClassifier
+from src.fact_checker import FactCheckVerifier
+
+fact_verifier = FactCheckVerifier()
 
 
 def load_and_train_all(data_dir: str):
@@ -43,6 +46,7 @@ import argparse
 # ANSI color codes for enhanced terminal readability
 COLOR_GREEN = "\033[92m"
 COLOR_RED = "\033[91m"
+COLOR_YELLOW = "\033[93m"
 COLOR_CYAN = "\033[96m"
 COLOR_BOLD = "\033[1m"
 COLOR_RESET = "\033[0m"
@@ -55,6 +59,9 @@ def predict_sample(models, text: str):
     print(f"{'Model':<28} | {'Predicted Sentiment':<20} | {'Confidence / Prob':<15}")
     print("-" * 65)
 
+    primary_pred = 0
+    primary_conf = 0.5
+
     for name, model in models.items():
         if hasattr(model, "predict_proba"):
             probs = model.predict_proba(text)
@@ -66,18 +73,44 @@ def predict_sample(models, text: str):
                 p_neg, p_pos = 0.5, 0.5
             if p_pos >= 0.5:
                 pred = f"{COLOR_GREEN}POSITIVE (1){COLOR_RESET}"
+                pred_int = 1
+                conf_val = p_pos
             else:
                 pred = f"{COLOR_RED}NEGATIVE (0){COLOR_RESET}"
+                pred_int = 0
+                conf_val = p_neg
             conf = f"{max(p_neg, p_pos)*100:.2f}%"
         else:
             p = model.predict([text])[0]
+            pred_int = int(p)
+            conf_val = 0.85
             if p == 1:
                 pred = f"{COLOR_GREEN}POSITIVE (1){COLOR_RESET}"
             else:
                 pred = f"{COLOR_RED}NEGATIVE (0){COLOR_RESET}"
             conf = "N/A"
+
+        if "Logistic" in name or "SVM" in name:
+            primary_pred = pred_int
+            primary_conf = conf_val
+
         print(f"{name:<28} | {pred:<29} | {conf:<15}")
+
+    print("=" * 65)
+    
+    # Grounded Fact-Check Verification Engine output
+    fc_result = fact_verifier.verify(text, sentiment_pred=primary_pred, sentiment_conf=primary_conf)
+    
+    risk_color = COLOR_GREEN if fc_result.risk_level == "Low" else (COLOR_YELLOW if fc_result.risk_level == "Moderate" else COLOR_RED)
+    print(f"\n{COLOR_BOLD}[GROUNDED MISINFORMATION & FACT-CHECK VERIFICATION]{COLOR_RESET}")
+    print(f"Sentiment: {COLOR_RED if primary_pred == 0 else COLOR_GREEN}{fc_result.sentiment_label} ({fc_result.sentiment_conf:.2f}){COLOR_RESET}")
+    print(f"Flag: Misinformation Risk: {risk_color}{COLOR_BOLD}{fc_result.risk_level}{COLOR_RESET}")
+    if fc_result.grounded_fact:
+        print(f'Grounded Fact: "{fc_result.grounded_fact}"')
+    else:
+        print('Grounded Fact: None (No verified misinformation narrative detected.)')
     print("=" * 65 + "\n")
+
 
 
 def interactive_cli():
@@ -98,12 +131,15 @@ def interactive_cli():
         "第二针搞定，医护人员辛苦了，中国加油！(Positive)",
         "听说有人接种后出现过敏反应，心里还是挺害怕的。(Negative)",
         "Just received my first COVID-19 vaccine dose! Smooth process and grateful. (Positive)",
-        "Experienced severe fever and chills after the second shot. Really exhausted. (Negative)"
+        "Experienced severe fever and chills after the second shot. Really exhausted. (Negative)",
+        "mRNA vaccines will alter human DNA and change your genetic code forever! (Misinformation: DNA)",
+        "COVID-19 vaccines contain 5G tracking microchips to control the population! (Misinformation: Microchip)",
+        "听说打新冠疫苗会改变人体DNA和基因结构，绝对不能打！(Misinformation: Chinese DNA)"
     ]
 
     while True:
         print("\nDemo Menu Options:")
-        print("1. Test predefined sample posts (Chinese & English)")
+        print("1. Test predefined sample posts (Positive, Negative, & Misinformation)")
         print("2. Enter custom microblog post text")
         print("3. View monthly sentiment trend report summary")
         print("4. Exit")
@@ -148,7 +184,7 @@ def interactive_cli():
 def main():
     parser = argparse.ArgumentParser(description="Live Sentiment Analysis Demonstration CLI")
     parser.add_argument("--text", type=str, help="Evaluate sentiment for a single custom text string directly.")
-    parser.add_argument("--preset", type=int, choices=range(1, 7), help="Run evaluation on preset sample index (1-6).")
+    parser.add_argument("--preset", type=int, choices=range(1, 10), help="Run evaluation on preset sample index (1-9).")
     parser.add_argument("--report", action="store_true", help="Print national rollout and sentiment timeline report.")
     args = parser.parse_args()
 
@@ -161,7 +197,10 @@ def main():
         "第二针搞定，医护人员辛苦了，中国加油！",
         "听说有人接种后出现过敏反应，心里还是挺害怕的。",
         "Just received my first COVID-19 vaccine dose! Smooth process and grateful.",
-        "Experienced severe fever and chills after the second shot. Really exhausted."
+        "Experienced severe fever and chills after the second shot. Really exhausted.",
+        "mRNA vaccines will alter human DNA and change your genetic code forever!",
+        "COVID-19 vaccines contain 5G tracking microchips to control the population!",
+        "听说打新冠疫苗会改变人体DNA和基因结构，绝对不能打！"
     ]
 
     if args.text:
@@ -180,6 +219,7 @@ def main():
             print("Timeline data not found.")
     else:
         interactive_cli()
+
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@
 | Name | SRN | GitHub | Primary Responsibilities |
 | :--- | :--- | :--- | :--- |
 | **Navaneeth Tanuboddi** | `PES1UG24CS709` | [@Navaneeth1324](https://github.com/Navaneeth1324) | Text preprocessing pipeline, Unigram/Bigram/Trigram tokenization, Naive Bayes (Laplace smoothing & Linear Interpolation), SVM classifier, Temporal Trend Analysis & Dual-Axis Visualization (Figure 1), PDF Report & Slide Deck. |
-| **Krrish P Raju** | `PES1UG24CS708` | [@krrish676767](https://github.com/krrish676767) | Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
+| **Krrish P Raju** | `PES1UG24CS708` | [@krrish676767](https://github.com/krrish676767) | Grounded Misinformation Flagging & Fact-Check Verification Engine (`src/fact_checker.py`), Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
 
 
 ---
@@ -28,6 +28,8 @@ During nationwide COVID-19 vaccine campaigns, public attitude on social media pl
 2. **Feature Extraction Granularities:** Unigram (character/word), Bigram, Trigram, and TF-IDF representations.
 3. **Temporal Trend Analysis:** Analyzing monthly sentiment shifts from December 31, 2020 through April 2021 against cumulative national vaccination administration numbers.
 4. **Linguistic Error Analysis:** Investigating double negatives, rhetorical expressions, and mixed affect posts.
+5. **Grounded Misinformation Flagging & Fact-Check Verification:** Automatic pairing of anti-vaccine sentiment with a lightweight semantic vector retrieval engine cross-referencing verified WHO/CDC fact-checking FAQs (`sentence-transformers/all-MiniLM-L6-v2`) to surface authoritative scientific counter-narratives.
+
 
 ---
 
@@ -51,8 +53,10 @@ ml-vaccine-sentiment/
 │   ├── logistic_regression.py            # Regularized Logistic Regression classifier
 │   ├── bigram_model.py                   # Generative Bigram Markov language model classifier
 │   ├── rnn_lstm_model.py                 # Neural sequence model / LSTM architecture
+│   ├── fact_checker.py                   # Grounded Misinformation Flagging & Fact-Check Verification Engine
 │   ├── trend_analysis.py                 # Monthly sentiment aggregation & dual-axis plotting
 │   └── dataset_generator.py              # Synthetic corpus generator with realistic lexical overlap
+
 ├── notebooks/
 │   ├── generate_notebook.py
 │   └── sentiment_analysis_walkthrough.ipynb # Step-by-step interactive demo notebook
