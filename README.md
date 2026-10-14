@@ -8,10 +8,11 @@
 
 ## 👥 Team Information
 
-| Name | SRN | Primary Responsibilities |
-| :--- | :--- | :--- |
-| **Navaneeth Tanuboddi** | `PES1UG24CS709` | Text preprocessing pipeline, Unigram/Bigram/Trigram tokenization, Naive Bayes (Laplace smoothing & Linear Interpolation), SVM classifier, Temporal Trend Analysis & Dual-Axis Visualization (Figure 1), PDF Report & Slide Deck. |
-| **Krrish P Raju** | `PES1UG24CS708` | Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
+| Name | SRN | GitHub | Primary Responsibilities |
+| :--- | :--- | :--- | :--- |
+| **Navaneeth Tanuboddi** | `PES1UG24CS709` | [@Navaneeth1324](https://github.com/Navaneeth1324) | Text preprocessing pipeline, Unigram/Bigram/Trigram tokenization, Naive Bayes (Laplace smoothing & Linear Interpolation), SVM classifier, Temporal Trend Analysis & Dual-Axis Visualization (Figure 1), PDF Report & Slide Deck. |
+| **Krrish P Raju** | `PES1UG24CS708` | [@krrish676767](https://github.com/krrish676767) | Evaluation metrics engine & data split manager (`util.py`), Regularized Logistic Regression, Bigram Markov Language Model, Recurrent Neural Network / LSTM sequence architecture, Interactive Live Demo CLI (`demo.py`), Model comparison benchmarking. |
+
 
 ---
 
@@ -133,7 +134,7 @@ jupyter notebook notebooks/sentiment_analysis_walkthrough.ipynb
 ```
 
 ---
-
+ 
 ### D. Compile / Regenerate the Two-Page Write-Up PDF
 To regenerate the publication-styled 2-page PDF deliverable:
 ```bash
@@ -142,6 +143,17 @@ python3 report/build_pdf_report.py
 Output generated at: `report/writeup.pdf`.
 
 ---
+
+### E. Run Automated Unit Test Suite
+To verify the entire preprocessing pipeline, metrics engine, models, and trend analysis:
+```bash
+make test
+# or
+python3 -m unittest discover -s tests -p "test_*.py" -v
+```
+
+---
+
 
 ## 📊 Experimental Results
 
