@@ -1,0 +1,63 @@
+id,text,true_label,true_sentiment,primary_pred,primary_correct,error_category,has_negation,has_contrast,has_rhetorical,length
+post_00052,去医院接种疫苗的过程记录一下，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,48
+post_00322,关于国产新冠疫苗接种的一些真实感受，整体感觉很棒，除了针口稍微有点胀痛，完全没有其他异常反应，点赞！,0,Negative,1,False,Negation Reversal,True,False,True,50
+post_00682,刚接种完第二针新冠灭活疫苗，疫苗研发时间仓促，临床远期安全性还是让人担忧，盲目推进值得商榷。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,46
+post_00979,打完疫苗在现场留观了三十分钟，接种速度非常快，现场医护人员很辛苦，大家赶紧积极去打吧！,0,Negative,1,False,Negation Reversal,True,False,True,43
+post_01464,排队等了半小时终于接种上疫苗，疫苗研发时间仓促，临床远期安全性还是让人担忧，盲目推进值得商榷。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_03204,今天去社区医院接种了新冠疫苗，整体感觉很棒，除了针口稍微有点胀痛，完全没有其他异常反应，点赞！,0,Negative,1,False,Negation Reversal,True,False,True,47
+post_01204,关于国产新冠疫苗接种的一些真实感受，接种速度非常快，现场医护人员很辛苦，大家赶紧积极去打吧！,0,Negative,1,False,Negation Reversal,True,False,True,46
+post_03207,打完第一针新冠疫苗后的身体状态，医护人员态度非常温柔耐心，现场组织井井有条，给祖国防疫政策点赞！,0,Negative,1,False,Negation Reversal,True,False,True,48
+post_03666,学校和社区都在积极组织疫苗接种，第二针反应比第一针大很多，心悸胸闷还失眠，真的非常后悔这么早接种。,1,Positive,0,False,Negation Reversal,True,False,False,49
+post_02896,打完新冠疫苗已经过去24小时了，现场排队秩序一团混乱，工作人员态度敷衍，体验感实在太差了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,45
+post_03155,陪家人一起去接种点打疫苗，医护人员态度非常温柔耐心，现场组织井井有条，给祖国防疫政策点赞！,0,Negative,1,False,Negation Reversal,True,False,True,45
+post_02125,陪家人一起去接种点打疫苗，第二针也很顺利，身体棒棒的，免费接种体现了国家担当，很有安全感！,0,Negative,1,False,Rhetorical / Sarcastic Cue,False,False,True,45
+post_02624,去医院接种疫苗的过程记录一下，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,46
+post_01781,响应全民免疫号召打了第一针疫苗，没有任何不良反应，身体一切如常，早接种早安心，大家不要犹豫！,0,Negative,1,False,Negation Reversal,True,False,True,46
+post_01911,打完新冠疫苗已经过去24小时了，但是打完之后手臂剧烈酸痛，抬都抬不起来，连着两天整个人都很虚弱。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,48
+post_00634,打完新冠疫苗已经过去24小时了，没有任何不良反应，身体一切如常，早接种早安心，大家不要犹豫！,0,Negative,1,False,Negation Reversal,True,False,True,46
+post_03615,今天去社区医院接种了新冠疫苗，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,48
+post_03340,去医院接种疫苗的过程记录一下，接种速度非常快，现场医护人员很辛苦，大家赶紧积极去打吧！,0,Negative,1,False,Negation Reversal,True,False,True,43
+post_03090,学校和社区都在积极组织疫苗接种，第二针反应比第一针大很多，心悸胸闷还失眠，真的非常后悔这么早接种。,1,Positive,0,False,Negation Reversal,True,False,False,49
+post_01684,打完新冠疫苗已经过去24小时了，疫苗研发时间仓促，临床远期安全性还是让人担忧，盲目推进值得商榷。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,48
+post_02428,身边很多同事朋友最近都去打了疫苗，做事情不要犹豫，要敢做，就像打疫苗，一犹豫就没了，果断接种是对的！,0,Negative,1,False,Negation Reversal,True,False,True,50
+post_01851,学校和社区都在积极组织疫苗接种，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_01443,陪家人一起去接种点打疫苗，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,46
+post_01505,陪家人一起去接种点打疫苗，做事情不要犹豫，要敢做，就像打疫苗，一犹豫就没了，果断接种是对的！,0,Negative,1,False,Negation Reversal,True,False,True,46
+post_02605,响应全民免疫号召打了第一针疫苗，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,51
+post_00798,身边很多同事朋友最近都去打了疫苗，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,48
+post_00718,打完疫苗在现场留观了三十分钟，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,50
+post_00984,打完第一针新冠疫苗后的身体状态，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_02284,排队等了半小时终于接种上疫苗，第二针反应比第一针大很多，心悸胸闷还失眠，真的非常后悔这么早接种。,1,Positive,0,False,Negation Reversal,True,False,False,48
+post_02374,今天去社区医院接种了新冠疫苗，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,50
+post_01861,今天去社区医院接种了新冠疫苗，宣传说基本没有反应，但身边好几个朋友打完都发烧乏力，感觉被忽悠了。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,48
+post_01828,陪家人一起去接种点打疫苗，但是打完之后手臂剧烈酸痛，抬都抬不起来，连着两天整个人都很虚弱。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,45
+post_00467,打完疫苗在现场留观了三十分钟，疫苗研发时间仓促，临床远期安全性还是让人担忧，盲目推进值得商榷。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_02757,排队等了半小时终于接种上疫苗，但是打完之后手臂剧烈酸痛，抬都抬不起来，连着两天整个人都很虚弱。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,47
+post_02989,去医院接种疫苗的过程记录一下，没有任何不适感，为全民免疫筑起屏障，感谢科研和医务人员的付出！,0,Negative,1,False,Negation Reversal,True,False,True,46
+post_00261,响应全民免疫号召打了第一针疫苗，接种速度非常快，现场医护人员很辛苦，大家赶紧积极去打吧！,0,Negative,1,False,Negation Reversal,True,False,True,44
+post_02754,关于国产新冠疫苗接种的一些真实感受，接种后当晚就开始发低烧，头晕恶心，浑身无力，副作用有点吃不消。,1,Positive,0,False,Negation Reversal,True,False,False,49
+post_02010,打完第一针新冠疫苗后的身体状态，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,49
+post_02947,身边很多同事朋友最近都去打了疫苗，接种后当晚就开始发低烧，头晕恶心，浑身无力，副作用有点吃不消。,1,Positive,0,False,Negation Reversal,True,False,False,48
+post_01723,学校和社区都在积极组织疫苗接种，宣传说基本没有反应，但身边好几个朋友打完都发烧乏力，感觉被忽悠了。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,49
+post_00750,打完疫苗在现场留观了三十分钟，疫苗研发时间仓促，临床远期安全性还是让人担忧，盲目推进值得商榷。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_01658,陪家人一起去接种点打疫苗，打完后皮肤大面积起红疹，去医院检查医生也说不清楚原因，真让人郁闷。,1,Positive,0,False,Negation Reversal,True,False,False,46
+post_00865,身边很多同事朋友最近都去打了疫苗，没有任何不良反应，身体一切如常，早接种早安心，大家不要犹豫！,0,Negative,1,False,Negation Reversal,True,False,True,47
+post_00150,打完疫苗在现场留观了三十分钟，打完后皮肤大面积起红疹，去医院检查医生也说不清楚原因，真让人郁闷。,1,Positive,0,False,Negation Reversal,True,False,False,48
+post_03695,陪家人一起去接种点打疫苗，但是打完之后手臂剧烈酸痛，抬都抬不起来，连着两天整个人都很虚弱。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,45
+post_00046,学校和社区都在积极组织疫苗接种，医护人员态度非常温柔耐心，现场组织井井有条，给祖国防疫政策点赞！,0,Negative,1,False,Negation Reversal,True,False,True,48
+post_00138,响应全民免疫号召打了第一针疫苗，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,47
+post_02495,响应全民免疫号召打了第一针疫苗，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,51
+post_03259,排队等了半小时终于接种上疫苗，宣传说基本没有反应，但身边好几个朋友打完都发烧乏力，感觉被忽悠了。,1,Positive,0,False,Mixed Affect + Negation,True,True,False,48
+post_01507,刚接种完第二针新冠灭活疫苗，现场排队秩序一团混乱，工作人员态度敷衍，体验感实在太差了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,43
+post_01537,去医院接种疫苗的过程记录一下，副作用确实存在，打完浑身发冷冒虚汗，请假躺了一整天，太遭罪了。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,46
+post_02186,响应全民免疫号召打了第一针疫苗，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,49
+post_01974,响应全民免疫号召打了第一针疫苗，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,51
+post_00924,响应全民免疫号召打了第一针疫苗，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,49
+post_01374,刚接种完第二针新冠灭活疫苗，听说个别人出现严重过敏和淋巴肿大，心里特别焦虑，不知道该不该打第二针。,1,Positive,0,False,Negation Reversal,True,False,False,49
+post_03287,去医院接种疫苗的过程记录一下，医护人员态度非常温柔耐心，现场组织井井有条，给祖国防疫政策点赞！,0,Negative,1,False,Negation Reversal,True,False,True,47
+post_00355,打完第一针新冠疫苗后的身体状态，第二针也很顺利，身体棒棒的，免费接种体现了国家担当，很有安全感！,0,Negative,1,False,Rhetorical / Sarcastic Cue,False,False,True,48
+post_01137,打完新冠疫苗已经过去24小时了，接种点人满为患，通风极差，本来想防病毒，结果差点在排队时中暑缺氧。,1,Positive,0,False,Subtle Lexical Ambiguity,False,False,False,49
+post_03184,陪家人一起去接种点打疫苗，第二针反应比第一针大很多，心悸胸闷还失眠，真的非常后悔这么早接种。,1,Positive,0,False,Negation Reversal,True,False,False,46
+post_03273,身边很多同事朋友最近都去打了疫苗，第二针反应比第一针大很多，心悸胸闷还失眠，真的非常后悔这么早接种。,1,Positive,0,False,Negation Reversal,True,False,False,50
+post_00370,学校和社区都在积极组织疫苗接种，第二针也很顺利，身体棒棒的，免费接种体现了国家担当，很有安全感！,0,Negative,1,False,Rhetorical / Sarcastic Cue,False,False,True,48
+post_00819,打完新冠疫苗已经过去24小时了，接种后当晚就开始发低烧，头晕恶心，浑身无力，副作用有点吃不消。,1,Positive,0,False,Negation Reversal,True,False,False,47
