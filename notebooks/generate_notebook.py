@@ -204,7 +204,9 @@ nb = {
  "nbformat_minor": 2
 }
 
-os.makedirs("/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/notebooks", exist_ok=True)
-with open("/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/notebooks/sentiment_analysis_walkthrough.ipynb", "w", encoding="utf-8") as f:
+base_dir = os.path.dirname(os.path.abspath(__file__))
+nb_path = os.path.join(base_dir, "sentiment_analysis_walkthrough.ipynb")
+with open(nb_path, "w", encoding="utf-8") as f:
     json.dump(nb, f, indent=1)
-print("Notebook generated successfully!")
+print(f"Notebook generated successfully at {nb_path}!")
+

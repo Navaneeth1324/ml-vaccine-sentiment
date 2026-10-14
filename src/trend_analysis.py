@@ -95,6 +95,8 @@ def compute_monthly_summary(monthly_posts_csv: str, models: Dict[str, Any]) -> p
 
 
 if __name__ == "__main__":
-    timeline_path = "/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/data/processed/vaccine_doses_timeline.csv"
-    fig1_path = "/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/report/figures/figure1_sentiment_trend.png"
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    timeline_path = os.path.join(base_dir, "data", "processed", "vaccine_doses_timeline.csv")
+    fig1_path = os.path.join(base_dir, "report", "figures", "figure1_sentiment_trend.png")
     plot_sentiment_vs_vaccine_doses(timeline_path, fig1_path)
+

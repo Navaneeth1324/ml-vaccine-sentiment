@@ -38,9 +38,19 @@ def load_and_train_all(data_dir: str):
     return models
 
 
+import argparse
+
+# ANSI color codes for enhanced terminal readability
+COLOR_GREEN = "\033[92m"
+COLOR_RED = "\033[91m"
+COLOR_CYAN = "\033[96m"
+COLOR_BOLD = "\033[1m"
+COLOR_RESET = "\033[0m"
+
+
 def predict_sample(models, text: str):
     print("\n" + "=" * 65)
-    print(f"INPUT POST: {text}")
+    print(f"{COLOR_BOLD}INPUT POST:{COLOR_RESET} {text}")
     print("=" * 65)
     print(f"{'Model':<28} | {'Predicted Sentiment':<20} | {'Confidence / Prob':<15}")
     print("-" * 65)
@@ -54,13 +64,19 @@ def predict_sample(models, text: str):
                 p_neg, p_pos = probs[0][0], probs[0][1]
             else:
                 p_neg, p_pos = 0.5, 0.5
-            pred = "POSITIVE (1)" if p_pos >= 0.5 else "NEGATIVE (0)"
+            if p_pos >= 0.5:
+                pred = f"{COLOR_GREEN}POSITIVE (1){COLOR_RESET}"
+            else:
+                pred = f"{COLOR_RED}NEGATIVE (0){COLOR_RESET}"
             conf = f"{max(p_neg, p_pos)*100:.2f}%"
         else:
             p = model.predict([text])[0]
-            pred = "POSITIVE (1)" if p == 1 else "NEGATIVE (0)"
+            if p == 1:
+                pred = f"{COLOR_GREEN}POSITIVE (1){COLOR_RESET}"
+            else:
+                pred = f"{COLOR_RED}NEGATIVE (0){COLOR_RESET}"
             conf = "N/A"
-        print(f"{name:<28} | {pred:<20} | {conf:<15}")
+        print(f"{name:<28} | {pred:<29} | {conf:<15}")
     print("=" * 65 + "\n")
 
 
@@ -69,7 +85,7 @@ def interactive_cli():
     data_dir = os.path.join(base_dir, "data", "processed")
     
     print("\n" + "=" * 70)
-    print("  COVID-19 VACCINE ATTITUDE SENTIMENT ANALYSIS - LIVE DEMO")
+    print(f"  {COLOR_BOLD}COVID-19 VACCINE ATTITUDE SENTIMENT ANALYSIS - LIVE DEMO{COLOR_RESET}")
     print("  Course: UE24CS352A - Machine Learning Mini-Project")
     print("  Presenters: Navaneeth Tanuboddi (709) & Krrish P Raju (708)")
     print("=" * 70)
@@ -129,5 +145,43 @@ def interactive_cli():
             print("Invalid choice, please select 1-4.")
 
 
+def main():
+    parser = argparse.ArgumentParser(description="Live Sentiment Analysis Demonstration CLI")
+    parser.add_argument("--text", type=str, help="Evaluate sentiment for a single custom text string directly.")
+    parser.add_argument("--preset", type=int, choices=range(1, 7), help="Run evaluation on preset sample index (1-6).")
+    parser.add_argument("--report", action="store_true", help="Print national rollout and sentiment timeline report.")
+    args = parser.parse_args()
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    data_dir = os.path.join(base_dir, "data", "processed")
+
+    samples = [
+        "打了第一针新冠疫苗，没有任何不良反应，相信祖国！",
+        "打完疫苗后手臂酸痛了好几天，甚至抬不起来，难受。",
+        "第二针搞定，医护人员辛苦了，中国加油！",
+        "听说有人接种后出现过敏反应，心里还是挺害怕的。",
+        "Just received my first COVID-19 vaccine dose! Smooth process and grateful.",
+        "Experienced severe fever and chills after the second shot. Really exhausted."
+    ]
+
+    if args.text:
+        models = load_and_train_all(data_dir)
+        predict_sample(models, args.text)
+    elif args.preset:
+        models = load_and_train_all(data_dir)
+        predict_sample(models, samples[args.preset - 1])
+    elif args.report:
+        timeline_csv = os.path.join(data_dir, "vaccine_doses_timeline.csv")
+        if os.path.exists(timeline_csv):
+            df = pd.read_csv(timeline_csv)
+            print("\nNational Vaccine Rollout & Sentiment Trajectory:")
+            print(df.to_string(index=False))
+        else:
+            print("Timeline data not found.")
+    else:
+        interactive_cli()
+
+
 if __name__ == "__main__":
-    interactive_cli()
+    main()
+

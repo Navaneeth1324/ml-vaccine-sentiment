@@ -199,6 +199,8 @@ def generate_pdf_report(output_pdf_path: str, figure1_path: str):
     print(f"Publication-quality PDF generated successfully: {output_pdf_path}")
 
 if __name__ == "__main__":
-    out_pdf = "/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/report/writeup.pdf"
-    fig1 = "/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/report/figures/figure1_sentiment_trend.png"
+    report_dir = os.path.dirname(os.path.abspath(__file__))
+    out_pdf = os.path.join(report_dir, "writeup.pdf")
+    fig1 = os.path.join(report_dir, "figures", "figure1_sentiment_trend.png")
     generate_pdf_report(out_pdf, fig1)
+

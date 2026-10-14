@@ -165,4 +165,7 @@ def generate_all_datasets(output_dir: str):
 
 
 if __name__ == "__main__":
-    generate_all_datasets("/Users/macm2/.gemini/antigravity/scratch/ml-vaccine-sentiment/data/processed")
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_dir = os.path.join(base_dir, "data", "processed")
+    generate_all_datasets(target_dir)
+
